@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>HOME</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+</head>
+
+<body
+  style="background-image:url('bg.jpg'); background-color: #cccccc; background-position: center;   background-repeat: no-repeat;  background-size: cover;">
+
+  <div class="container" ng-app="myApp" ng-controller="controller">
+
+    <div class="row justify-content-lg-between my-5">
+
+
+      <div class="col-lg-4 border bg-light">
+        <img src="PCCOE_LOGO.jpg" class="img-fluid">
+      </div>
+
+
+      <div class=" border bg-light col-lg-7 ">
+
+        <form class="p-3" name="register">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="uname">Email</label>
+              <input type="email" class="form-control" id="uname" ng-model="uname">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="pass">Password</label>
+              <input type="password" class="form-control" id="pass" ng-model="pass">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="address1">Address</label>
+            <input type="text" class="form-control" id="address1" ng-model="address1" placeholder="1234 Main St">
+          </div>
+          <div class="form-group">
+            <label for="address2">Address 2</label>
+            <input type="text" class="form-control" id="address2" ng-model="address2"
+              placeholder="Apartment, studio, or floor">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" ng-model="city">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="state">State</label>
+              <select id="state" ng-model="state" class="form-control">
+                <option>Maharashtra</option>
+                <option>Kerala</option>
+                <option>Goa</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="zip">Zip</label>
+              <input type="text" class="form-control" id="zip" ng-model="zip">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check" ng-model="check">
+              <label class="form-check-label" for="check">
+                Agree to all terms and conditions
+              </label>
+            </div>
+          </div>
+          <input ng-click="insertData()" type="submit" class="btn btn-primary" value="Insert"></input>
+          <input ng-click="selectData()" type="submit" class="btn btn-secondary" value="Select"></input>
+          <input ng-click="updateData()" type="submit" class="btn btn-warning" value="Update"></input>
+          <input ng-click="deleteData()" type="submit" class="btn btn-danger" value="Delete"></input>
+        </form>
+
+      </div>
+    </div>
+    <div class="row justify-content-lg-between my-5">
+      <div class="col-lg-12 border bg-light" ng-repeat="user in users">
+
+        <h1>{{user.uname}}</h1>
+        <h1>{{user.pass}}</h1>
+
+        <p>{{user.address1}},{{user.address2}}</p>
+
+        <p>{{user.city}},{{user.state}},{{user.zip}}</p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script>
+    var app = angular.module("myApp", []);
+    app.controller("controller", function ($scope, $http) {
+      $scope.insertData = function () {
+        $http.post(
+          "register.php",
+          { 'uname': $scope.uname, 'pass': $scope.pass, 'address1': $scope.address1, 'address2': $scope.address2, 'city': $scope.city, 'state': $scope.state, 'zip': $scope.zip, 'check': $scope.check, 'operation': 'insert' }
+        ).success(function (data) {
+          $scope.uname = $scope.pass = $scope.address1 = $scope.address2 = $scope.city = $scope.state = $scope.zip = $scope.check = null;
+          alert(data);
+          $scope.selectData();
+        });
+      }
+      $scope.selectData = function () {
+        $http.post("register.php",
+          { 'uname': $scope.uname, 'operation': 'select' })
+          .success(function (data) {
+            $scope.uname = $scope.pass = $scope.address1 = $scope.address2 = $scope.city = $scope.state = $scope.zip = $scope.check = null;
+            $scope.users = data;
+          });
+      }
+      $scope.deleteData = function () {
+        $http.post("register.php",
+          { 'uname': $scope.uname, 'operation': 'delete' })
+          .success(function (data) {
+            alert(data);
+            $scope.uname = $scope.pass = $scope.address1 = $scope.address2 = $scope.city = $scope.state = $scope.zip = $scope.check = null;
+            $scope.selectData();
+          });
+      }
+      $scope.updateData = function () {
+        $http.post("register.php",
+          { 'uname': $scope.uname, 'pass': $scope.pass, 'operation': 'update' })
+          .success(function (data) {
+            $scope.uname = $scope.pass = $scope.address1 = $scope.address2 = $scope.city = $scope.state = $scope.zip = $scope.check = null;
+            alert(data);
+            $scope.selectData();
+          });
+      }
+    });
+  </script>
+</body>
+
+</html>
